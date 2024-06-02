@@ -1,5 +1,7 @@
 package br.edu.infnet.spring_boot.TP3.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ public class Curso {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_aluno")
+    @JsonBackReference
     private Aluno aluno;
 
     public Curso() {

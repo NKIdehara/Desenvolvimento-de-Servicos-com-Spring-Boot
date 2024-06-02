@@ -3,7 +3,6 @@ package br.edu.infnet.spring_boot.TP3;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
 public class Tp3Application {
 
