@@ -1,8 +1,9 @@
 package br.edu.infnet.spring_boot.AT.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.spring_boot.AT.model.Funcionario;
@@ -13,28 +14,23 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public ResponseEntity<?> getFuncionarios(){
-        if(funcionarioRepository.count() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem funcionários!");
-        return ResponseEntity.ok(funcionarioRepository.findAll());
+    public List<Funcionario> getFuncionarios(){
+        return funcionarioRepository.findAll();
     }
 
-    public ResponseEntity<?> getFuncionarioById(Long id){
-        if(funcionarioRepository.count() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem funcionários!");
-        if(funcionarioRepository.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("funcionário não cadastrado!");
-        return ResponseEntity.ok(funcionarioRepository.findById(id));
+    public Optional<Funcionario> getFuncionarioById(Long id){
+        return funcionarioRepository.findById(id);
 
     }
-    public ResponseEntity<?> getFuncionariosByDepartamentoId(Long idDepartamento){
-        if(funcionarioRepository.count() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem funcionários!");
-        return ResponseEntity.ok(funcionarioRepository.findByDepartamentoId(idDepartamento));
+    public List<Funcionario> getFuncionariosByDepartamentoId(Long idDepartamento){
+        return funcionarioRepository.findByDepartamentoId(idDepartamento);
     }
 
-    public ResponseEntity<?> createFuncionario(Funcionario funcionario) {
-        funcionarioRepository.save(funcionario);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Funcionário cadastrado!");
+    public Funcionario createFuncionario(Funcionario funcionario) {
+        return funcionarioRepository.save(funcionario);
     }
 
-    public ResponseEntity<?> updateFuncionario(Long id, Funcionario funcionario){
+    public Funcionario updateFuncionario(Long id, Funcionario funcionario){
         return funcionarioRepository.findById(id).map(update -> {
             update.setNome(funcionario.getNome());
             update.setEndereco(funcionario.getEndereco());
@@ -42,16 +38,13 @@ public class FuncionarioService {
             update.setEmail(funcionario.getEmail());
             update.setDataNascimento(funcionario.getDataNascimento());
             update.setDepartamento(funcionario.getDepartamento());
-            funcionarioRepository.save(update);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Funcionário atualizado!");
+            return funcionarioRepository.save(update);
         }).orElseGet(() -> {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não cadastrado!");
+            return null;
         });         
     }
 
-    public ResponseEntity<?> deleteFuncionarioById(Long id){
-        if(funcionarioRepository.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não cadastrado!");
+    public void deleteFuncionarioById(Long id){
         funcionarioRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Funcionário excluído!");
     }
 }

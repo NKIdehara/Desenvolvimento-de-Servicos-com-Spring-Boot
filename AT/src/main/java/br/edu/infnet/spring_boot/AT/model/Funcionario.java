@@ -30,6 +30,14 @@ public class Funcionario {
 
     public Funcionario() {
     }
+    public Funcionario(String nome, String endereco, String telefone, String email, String dataNascimento, Departamento departamento) {
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.departamento = departamento;
+    }
     public Funcionario(Long id, String nome, String endereco, String telefone, String email, String dataNascimento, Departamento departamento) {
         this.id = id;
         this.nome = nome;

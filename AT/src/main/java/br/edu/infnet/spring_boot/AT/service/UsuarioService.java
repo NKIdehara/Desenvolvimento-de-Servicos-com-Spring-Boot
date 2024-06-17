@@ -1,8 +1,9 @@
 package br.edu.infnet.spring_boot.AT.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.spring_boot.AT.model.Usuario;
@@ -13,38 +14,31 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public ResponseEntity<?> getUsuarios(){
-        if(usuarioRepository.count() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existem usuários!");
-        return ResponseEntity.ok(usuarioRepository.findAll());
+    public List<Usuario> getUsuarios(){
+        return usuarioRepository.findAll();
     }
 
-    public ResponseEntity<?> getUsuarioById(String id){
-        if(usuarioRepository.count() == 0) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe usuário!");
-        if(usuarioRepository.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
-        return ResponseEntity.ok(usuarioRepository.findById(id));
+    public Optional<Usuario> getUsuarioById(String id){
+        return usuarioRepository.findById(id);
     }
 
-    public ResponseEntity<?> createUsuario(Usuario usuario){
-        usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário cadastrado!");
+    public Usuario createUsuario(Usuario usuario){
+        return usuarioRepository.save(usuario);
     }
 
-    public ResponseEntity<?> updateUsuario(String id, Usuario usuario){
-        usuarioRepository.findById(id).map(update -> {
+    public Usuario updateUsuario(String id, Usuario usuario){
+        return usuarioRepository.findById(id).map(update -> {
+            update.setId(id);
             update.setNome(usuario.getNome());
             update.setSenha(usuario.getSenha());
             update.setPapel(usuario.getPapel());
-            usuarioRepository.save(update);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Usuário atualizado!");
+            return usuarioRepository.save(update);
         }).orElseGet(() -> {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não cadastrado!");
+            return null;
         });
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Usuário atualizado!");
     }
 
-    public ResponseEntity<?> deleteUsuario(String id){
-        if(usuarioRepository.findById(id).isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
+    public void deleteUsuario(String id){
         usuarioRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Usuário excluído!");
     }
 }

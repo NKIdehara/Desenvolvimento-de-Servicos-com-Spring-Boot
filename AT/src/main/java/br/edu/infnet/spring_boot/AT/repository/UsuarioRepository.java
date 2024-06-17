@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.edu.infnet.spring_boot.AT.model.Usuario;
 
 @Repository
-public interface UsuarioRepository extends MongoRepository<Usuario, String> {   
+public interface UsuarioRepository extends MongoRepository<Usuario, String> {
+    Usuario findUsuarioByNome(String nome);
 }

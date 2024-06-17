@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
     List<Funcionario> findByDepartamentoId(Long idDepartamento);
-
 }

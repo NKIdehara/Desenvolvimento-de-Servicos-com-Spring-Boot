@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: spring_boot_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/spring_boot_db
+
+  app:
+    build: .
+    container_name: spring_boot_at
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/spring_boot_db
+
+volumes:
+  mongo-data:
